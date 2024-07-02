@@ -1,4 +1,6 @@
 import time
+from security import safe_command
+
 import subprocess,re,datetime,time,os,platform,json,PySimpleGUI as sg; from subprocess import Popen; from make_real_readme import main
 
 # mkdir
@@ -32,7 +34,7 @@ def openfile(a_path):
 		os.startfile(a_path)
 
 	elif 'Linux' in platform.system():
-		Popen(f'exo-open "{a_path}"', shell=True)
+		safe_command.run(Popen, f'exo-open "{a_path}"', shell=True)
 
 def opendir(a_path):
 	# Folder exists?
@@ -43,7 +45,7 @@ def opendir(a_path):
 		if 'Windows' in platform.system():
 			os.startfile(a_path)
 		elif 'Linux' in platform.system():
-			Popen(f'exo-open --launch FileManager --working-directory "{a_path}"', shell=True)
+			safe_command.run(Popen, f'exo-open --launch FileManager --working-directory "{a_path}"', shell=True)
 	except Exception as e:
 		sg.Popen(f"Error, can't open a file: '{e}'")
 
@@ -651,9 +653,9 @@ def mini_GUI():
 				psg_module_path_SDK = psg_module_path.replace('__init__.py', 'PySimpleGUI.py')
 				if 'pycharm' == texteditor:
 					texteditor = values['_PyCharm_path_']
-					subprocess.Popen(f'"{texteditor}" --line {lineno} "{psg_module_path_SDK}"', shell=True)
+					safe_command.run(subprocess.Popen, f'"{texteditor}" --line {lineno} "{psg_module_path_SDK}"', shell=True)
 				elif 'subl' == texteditor:
-					subprocess.Popen(f'{texteditor} "{psg_module_path_SDK}:{lineno}"', shell=True)
+					safe_command.run(subprocess.Popen, f'{texteditor} "{psg_module_path_SDK}:{lineno}"', shell=True)
 
 		# if event == '-CALL_REF-listbox-':
 		# 	res = values['-CALL_REF-listbox-'][0]

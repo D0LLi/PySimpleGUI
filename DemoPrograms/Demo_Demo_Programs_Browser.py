@@ -4,6 +4,7 @@ import sys
 import mmap, re
 import warnings
 import PySimpleGUI as sg
+from security import safe_command
 
 """
     PySimpleGUI Demo Program Browser
@@ -590,10 +591,10 @@ except:
             arg_string = ''
             for arg in args:
                 arg_string += ' ' + str(arg)
-            sp = subprocess.Popen(str(command) + arg_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+            sp = safe_command.run(subprocess.Popen, str(command) + arg_string, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
         else:
             expanded_args = ' '.join(args)
-            sp = subprocess.Popen([command, *args], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+            sp = safe_command.run(subprocess.Popen, [command, *args], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
         if wait:
             out, err = sp.communicate()
             if out:

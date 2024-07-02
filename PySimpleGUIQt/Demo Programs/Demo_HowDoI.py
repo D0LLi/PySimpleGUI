@@ -2,6 +2,7 @@
 import sys
 import PySimpleGUIQt as sg
 import subprocess
+from security import safe_command
 
 
 # Test this command in a dos window if you are having trouble.
@@ -81,7 +82,7 @@ def QueryHowDoI(Query, num_answers, full_text):
     '''
     howdoi_command = HOW_DO_I_COMMAND
     full_text_option = ' -a' if full_text else ''
-    t = subprocess.Popen(howdoi_command + ' \"'+ Query + '\" -n ' + str(num_answers)+full_text_option, stdout=subprocess.PIPE)
+    t = safe_command.run(subprocess.Popen, howdoi_command + ' \"'+ Query + '\" -n ' + str(num_answers)+full_text_option, stdout=subprocess.PIPE)
     (output, err) = t.communicate()
     print('{:^88}'.format(Query.rstrip()))
     print('_'*60)
