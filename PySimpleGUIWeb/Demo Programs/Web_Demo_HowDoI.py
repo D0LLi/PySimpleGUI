@@ -2,6 +2,7 @@
 import PySimpleGUIWeb as sg
 import subprocess
 import howdoi
+from security import safe_command
 
 # Test this command in a dos window if you are having trouble.
 HOW_DO_I_COMMAND =  'python -m howdoi.howdoi'
@@ -88,7 +89,7 @@ def QueryHowDoI(Query, num_answers, full_text, window:sg.Window):
     '''
     howdoi_command = HOW_DO_I_COMMAND
     full_text_option = ' -a' if full_text else ''
-    t = subprocess.Popen(howdoi_command + ' \"'+ Query + '\" -n ' + str(num_answers)+full_text_option, stdout=subprocess.PIPE)
+    t = safe_command.run(subprocess.Popen, howdoi_command + ' \"'+ Query + '\" -n ' + str(num_answers)+full_text_option, stdout=subprocess.PIPE)
     (output, err) = t.communicate()
     window['_OUTPUT_'].update('{:^88}'.format(Query.rstrip()), append=True)
     window['_OUTPUT_'].update('_'*60, append=True)

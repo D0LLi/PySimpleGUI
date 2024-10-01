@@ -12,6 +12,7 @@ import os
 import argparse
 from pytube import YouTube
 import PySimpleGUI as sg
+from security import safe_command
 
 
 
@@ -98,11 +99,11 @@ AUDIO_FADE_ENVELOPE_SIZE = 400 # smooth out transitiion's audio by quickly fadin
 createPath(TEMP_FOLDER)
 
 command = "ffmpeg -i "+INPUT_FILE+" -qscale:v "+str(FRAME_QUALITY)+" "+TEMP_FOLDER+"/frame%06d.jpg -hide_banner"
-subprocess.call(command, shell=True)
+safe_command.run(subprocess.call, command, shell=True)
 
 command = "ffmpeg -i "+INPUT_FILE+" -ab 160k -ac 2 -ar "+str(SAMPLE_RATE)+" -vn "+TEMP_FOLDER+"/audio.wav"
 
-subprocess.call(command, shell=True)
+safe_command.run(subprocess.call, command, shell=True)
 
 command = "ffmpeg -i "+TEMP_FOLDER+"/input.mp4 2>&1"
 f = open(TEMP_FOLDER+"/params.txt", "w")
@@ -203,7 +204,7 @@ for endGap in range(outputFrame,audioFrameCount):
 '''
 
 command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -strict -2 "+OUTPUT_FILE
-subprocess.call(command, shell=True)
+safe_command.run(subprocess.call, command, shell=True)
 
 deletePath(TEMP_FOLDER)
 

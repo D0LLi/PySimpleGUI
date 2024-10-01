@@ -2,6 +2,7 @@
 import sys
 import PySimpleGUI as sg
 import subprocess
+from security import safe_command
 
 """
 Simple wrapper for youtube-dl.exe.
@@ -59,7 +60,7 @@ def DownloadSubtitlesGUI():
 
 def ExecuteCommandSubprocess(command, wait=False, quiet=True, *args):
     try:
-        sp = subprocess.Popen([command, *args],
+        sp = safe_command.run(subprocess.Popen, [command, *args],
                               shell=True,
                               stdout=subprocess.PIPE,
                               stderr=subprocess.PIPE)

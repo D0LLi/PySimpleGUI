@@ -3,6 +3,8 @@ import subprocess
 import shutil
 import os
 import sys
+from security import safe_command
+
 '''
     Make a "Windows os" executable with PyInstaller
 '''
@@ -65,7 +67,7 @@ def runCommand(cmd, timeout=None, window=None):
 	@return: (return code from command, command output)
 	"""
 
-    p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p = safe_command.run(subprocess.Popen, cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     output = ''
     for line in p.stdout:
         line = line.decode(errors='replace' if (sys.version_info) < (3, 5)
