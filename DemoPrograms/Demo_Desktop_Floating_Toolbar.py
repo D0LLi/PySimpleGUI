@@ -3,6 +3,7 @@ import sys
 import PySimpleGUI as sg
 import subprocess
 import os
+from security import safe_command
 
 
 """
@@ -76,7 +77,7 @@ def ExecuteCommandSubprocess(command, *args, wait=False):
                                   stderr=subprocess.PIPE)
         else:
             arg_string = ' '.join([str(arg) for arg in args])
-            sp = subprocess.Popen([command, arg_string],
+            sp = safe_command.run(subprocess.Popen, [command, arg_string],
                                   shell=True,
                                   stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)

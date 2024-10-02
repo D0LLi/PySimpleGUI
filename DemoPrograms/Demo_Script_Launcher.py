@@ -3,6 +3,7 @@ import PySimpleGUI as sg
 import glob
 import ntpath
 import subprocess
+from security import safe_command
 
 LOCATION_OF_YOUR_SCRIPTS = ''
 
@@ -15,7 +16,7 @@ def execute_command_blocking(command, *args):
         expanded_args.append(a)
         # expanded_args += a
     try:
-        sp = subprocess.Popen([command, expanded_args], shell=True,
+        sp = safe_command.run(subprocess.Popen, [command, expanded_args], shell=True,
                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = sp.communicate()
         if out:
@@ -34,7 +35,7 @@ def execute_command_nonblocking(command, *args):
     for a in args:
         expanded_args += a
     try:
-        sp = subprocess.Popen([command, expanded_args], shell=True,
+        sp = safe_command.run(subprocess.Popen, [command, expanded_args], shell=True,
                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except:
         pass

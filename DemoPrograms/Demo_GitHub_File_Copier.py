@@ -4,6 +4,7 @@ import subprocess
 import sys
 
 import PySimpleGUI as sg
+from security import safe_command
 
 """
     Demo - GitHub File Management
@@ -262,10 +263,10 @@ def execute_command_subprocess(command, *args, wait=False):
         arg_string = ''
         for arg in args:
             arg_string += ' ' + str(arg)
-        sp = subprocess.Popen(['python3' + arg_string, ], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        sp = safe_command.run(subprocess.Popen, ['python3' + arg_string, ], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         expanded_args = ' '.join(args)
-        sp = subprocess.Popen([command, expanded_args], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        sp = safe_command.run(subprocess.Popen, [command, expanded_args], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if wait:
         out, err = sp.communicate()
         if out:

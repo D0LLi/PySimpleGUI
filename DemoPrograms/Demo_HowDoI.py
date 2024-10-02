@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import PySimpleGUI as sg
 import subprocess
+from security import safe_command
 
 '''
     Famouns howdoi command in PSG
@@ -83,7 +84,7 @@ def QueryHowDoI(Query, num_answers, full_text):
     :return: nothing
     '''
     full_text_option = ' -a' if full_text else ''
-    t = subprocess.Popen(HOW_DO_I_COMMAND + ' \"' + Query + '\" -n ' +
+    t = safe_command.run(subprocess.Popen, HOW_DO_I_COMMAND + ' \"' + Query + '\" -n ' +
                          str(num_answers)+full_text_option, stdout=subprocess.PIPE)
     (output, err) = t.communicate()
     print('{:^88}'.format(Query.rstrip()))
